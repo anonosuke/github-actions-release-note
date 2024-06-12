@@ -1,0 +1,54 @@
+name: Create release tag and release note.
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  create-release-tag:
+    runs-on: ubuntu-latest
+
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # 最新のタグを取得する
+      - name: Get latest tag
+        id: latest_tag
+        run: |
+          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+          if [ -z "$latest_tag" ]; then
+            latest_tag=0
+          fi
+          echo "::set-output name=latest_tag::$latest_tag"
+
+      # タグを生成する
+      - name: Generate release tag
+        id: release_tag
+        run: |
+          latest_tag=${{ steps.latest_tag.outputs.latest_tag }}
+          if [[ "$latest_tag" =~ ^v[0-9]+ ]]; then
+            version=${latest_tag#v}
+          else
+            version=$latest_tag
+          fi
+          new_version=$((version + 1))
+          new_tag="v$new_version"
+          echo "::set-output name=release_tag::$new_tag"
+
+      # 前回リリースからの差分をもとに、リリースノートの本文を生成する
+      - name: Generate release note
+        id: release_note
+        run: |
+          release_note=$(curl -X POST -H 'Accept: application/vnd.github.v3+json' -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' https://api.github.com/repos/${{ github.repository }}/releases/generate-notes -d '{"tag_name":"${{ steps.release_tag.outputs.release_tag }}", "previous_tag_name":"${{ steps.latest_tag.outputs.latest_tag }}"}' | jq .body | sed 's/"//g')
+          echo "::set-output name=release_note::$release_note"
+
+      # タグを切り、リリースノートを作成する
+      - name: Create Release
+        run: |
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -d "{ \"tag_name\": \"${{ steps.release_tag.outputs.release_tag }}\", \"name\": \"${{ steps.release_tag.outputs.release_tag }}\", \"body\": \"${{ steps.release_note.outputs.release_note }}\"}" \
+            https://api.github.com/repos/${{ github.repository }}/releases
