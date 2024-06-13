@@ -6,13 +6,22 @@ changelog:
   categories:
     - title: New Features
       labels:
-        - "feature"
+        - "1.機能"
     - title: Bug Fixes
       labels:
-        - "bug"
-    - title: Hot Fixes
+        - "2.バグ"
+    - title: UI/UX
       labels:
-        - "hotfix"
+        - "3.UI/UX"
+    - title: インフラ
+      labels:
+        - "4.インフラ"
+    - title: リファクタリング
+      labels:
+        - "5.リファクタリング"
+    - title: テスト
+      labels:
+        - "6.テスト"
     - title: Other Changes
       labels:
         - "*"
