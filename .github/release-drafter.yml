@@ -22,8 +22,6 @@ categories:
       - "*"
 exclude-labels:
   - "7.リリースノートに載せない"
-change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
-change-title-escapes: '\<*_&'
 autolabeler:
   - label: "1.機能"
     title:
@@ -34,4 +32,4 @@ footer: |
 
   ## 🌱 すべての変更点
 
-  https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
+  https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$PREVIOUS_TAG
