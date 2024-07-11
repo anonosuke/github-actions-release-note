@@ -30,6 +30,8 @@ autolabeler:
   - label: feature
     branch:
       - '/^feat(ure)?[/-].+/'
+template: |
+  $CHANGES
 footer: |
 
   ## 🌱 すべての変更点
