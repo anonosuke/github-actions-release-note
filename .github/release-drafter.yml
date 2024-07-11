@@ -28,8 +28,3 @@ autolabeler:
       - '/^feat(ure)?: .+/'
 template: |
   $CHANGES
-footer: |
-
-  ## 🌱 すべての変更点
-
-  https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$PREVIOUS_TAG
