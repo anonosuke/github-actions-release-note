@@ -1,53 +1,53 @@
-name: Create release tag and release note
+# name: Create release tag and release note
 
-on:
-  pull_request:
-    types: [closed]
-    branches:
-      - main
+# on:
+#   pull_request:
+#     types: [closed]
+#     branches:
+#       - main
 
-jobs:
-  create-release-tag:
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
+# jobs:
+#   create-release-tag:
+#     if: github.event.pull_request.merged == true
+#     runs-on: ubuntu-latest
 
-    env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      TZ: 'Asia/Tokyo'
+#     env:
+#       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       TZ: 'Asia/Tokyo'
 
-    steps:
-      - uses: actions/checkout@v3
+#     steps:
+#       - uses: actions/checkout@v3
 
-      # 前回のリリースタグを取得する
-      - name: Get previous tag
-        id: pre_tag
-        run: |
-          echo "pre_tag=$(curl -H 'Accept: application/vnd.github.v3+json' -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)" >> $GITHUB_OUTPUT
+#       # 前回のリリースタグを取得する
+#       - name: Get previous tag
+#         id: pre_tag
+#         run: |
+#           echo "pre_tag=$(curl -H 'Accept: application/vnd.github.v3+json' -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)" >> $GITHUB_OUTPUT
 
-      # タグを生成する（前回のリリースタグの名前の数字部分をインクリメント）
-      - name: Generate tag
-        id: release_tag
-        run: |
-          pre_tag="${{ steps.pre_tag.outputs.pre_tag }}"
-          # pre_tagが数字のみの場合はインクリメント
-          if [[ "$pre_tag" =~ ^[0-9]+$ ]]; then
-            new_version=$((pre_tag + 1))
-          else
-            new_version="unknown"
-          fi
-          echo "release_tag=$new_version" >> $GITHUB_OUTPUT
+#       # タグを生成する（前回のリリースタグの名前の数字部分をインクリメント）
+#       - name: Generate tag
+#         id: release_tag
+#         run: |
+#           pre_tag="${{ steps.pre_tag.outputs.pre_tag }}"
+#           # pre_tagが数字のみの場合はインクリメント
+#           if [[ "$pre_tag" =~ ^[0-9]+$ ]]; then
+#             new_version=$((pre_tag + 1))
+#           else
+#             new_version="unknown"
+#           fi
+#           echo "release_tag=$new_version" >> $GITHUB_OUTPUT
 
-      # 前回リリースからの差分をもとに、リリースノートの本文を生成する
-      - name: Generate release note changes
-        id: release_note
-        run: |
-          release_note=$(curl -X POST -H 'Accept: application/vnd.github.v3+json' -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' https://api.github.com/repos/${{ github.repository }}/releases/generate-notes -d "{\"tag_name\":\"${{ steps.release_tag.outputs.release_tag }}\", \"previous_tag_name\":\"${{ steps.pre_tag.outputs.pre_tag }}\", \"target_commitish\":\"main\"}")
-          echo "release_note=$(echo "$release_note" | jq -r .body)" >> $GITHUB_OUTPUT
+#       # 前回リリースからの差分をもとに、リリースノートの本文を生成する
+#       - name: Generate release note changes
+#         id: release_note
+#         run: |
+#           release_note=$(curl -X POST -H 'Accept: application/vnd.github.v3+json' -H 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' https://api.github.com/repos/${{ github.repository }}/releases/generate-notes -d "{\"tag_name\":\"${{ steps.release_tag.outputs.release_tag }}\", \"previous_tag_name\":\"${{ steps.pre_tag.outputs.pre_tag }}\", \"target_commitish\":\"main\"}")
+#           echo "release_note=$(echo "$release_note" | jq -r .body)" >> $GITHUB_OUTPUT
 
-      # タグを切り、リリースノートを作成する
-      - name: Create Release
-        run: |
-          curl -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -d "{\"tag_name\": \"${{ steps.release_tag.outputs.release_tag }}\", \"target_commitish\": \"main\", \"name\": \"${{ steps.release_tag.outputs.release_tag }}\", \"body\": \"${{ steps.release_note.outputs.release_note }}\"}" \
-            https://api.github.com/repos/${{ github.repository }}/releases
+#       # タグを切り、リリースノートを作成する
+#       - name: Create Release
+#         run: |
+#           curl -X POST \
+#             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+#             -d "{\"tag_name\": \"${{ steps.release_tag.outputs.release_tag }}\", \"target_commitish\": \"main\", \"name\": \"${{ steps.release_tag.outputs.release_tag }}\", \"body\": \"${{ steps.release_note.outputs.release_note }}\"}" \
+#             https://api.github.com/repos/${{ github.repository }}/releases

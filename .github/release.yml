@@ -1,27 +1,37 @@
-# PRのラベルに応じてリリースノートのカテゴリを分ける
-changelog:
-  exclude:
-    authors:
-      - github-actions
-  categories:
-    - title: New Features
-      labels:
-        - "1.機能"
-    - title: Bug Fixes
-      labels:
-        - "2.バグ"
-    - title: UI/UX
-      labels:
-        - "3.UI/UX"
-    - title: インフラ
-      labels:
-        - "4.インフラ"
-    - title: リファクタリング
-      labels:
-        - "5.リファクタリング"
-    - title: テスト
-      labels:
-        - "6.テスト"
-    - title: Other Changes
-      labels:
-        - "*"
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+categories:
+  - title: New Features
+    labels:
+      - "1.機能"
+  - title: Bug Fixes
+    labels:
+      - "2.バグ"
+  - title: UI/UX
+    labels:
+      - "3.UI/UX"
+  - title: インフラ
+    labels:
+      - "4.インフラ"
+  - title: リファクタリング
+    labels:
+      - "5.リファクタリング"
+  - title: テスト
+    labels:
+      - "6.テスト"
+  - title: Other Changes
+    labels:
+      - "*"
+exclude-labels:
+  - '7.リリースノートに載せない'
+change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+change-title-escapes: '\<*_&'
+autolabeler:
+  - label: feature
+    branch:
+      - '/^feat(ure)?[/-].+/'
+footer: |
+
+  ## 🌱 すべての変更点
+
+  https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION
