@@ -41,15 +41,14 @@ jobs:
             new_version=1
           fi
           echo "new_version=v${new_version}" >> $GITHUB_ENV
-          echo "New version: ${{ env.new_version }}"
 
       - name: Create Release
         uses: release-drafter/release-drafter@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: 'v${{ env.new_version }}'
-          tag: 'v${{ env.new_version }}'
+          name: '${{ env.new_version }}'
+          tag: '${{ env.new_version }}'
           version: ${{ env.new_version }}
           publish: true
 
