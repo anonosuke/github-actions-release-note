@@ -1,0 +1,30 @@
+categories:
+  - title: 機能追加🌟
+    labels:
+      - "1.機能"
+  - title: バグ修正🔧
+    labels:
+      - "2.バグ"
+  - title: UI/UX🎨
+    labels:
+      - "3.UI/UX"
+  - title: インフラ💻
+    labels:
+      - "4.インフラ"
+  - title: リファクタリング🔁
+    labels:
+      - "5.リファクタリング"
+  - title: テスト🧪
+    labels:
+      - "6.テスト"
+  - title: 他の変更🔍
+    labels:
+      - "*"
+exclude-labels:
+  - "7.リリースノートに載せない"
+autolabeler:
+  - label: "1.機能"
+    title:
+      - '^feat: .+'
+template: |
+  $CHANGES
