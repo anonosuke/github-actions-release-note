@@ -25,6 +25,6 @@ exclude-labels:
 autolabeler:
   - label: "1.機能"
     title:
-      - '/^feat(ure)?: .+/'
+      - '^feat: .+'
 template: |
   $CHANGES
