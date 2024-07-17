@@ -41,8 +41,8 @@ version-resolver:
 
 autolabeler:
   - label: "1.機能"
-    title:
-      - '^feat: .+'
+    branch:
+      - '/^feat(ure)?[/-].+/'
 
 template: |
   $CHANGES
