@@ -40,7 +40,7 @@ version-resolver:
   default: patch
 
 autolabeler:
-  - label: "1.機能"
+  - label: enhancement
     branch:
       - '/^feat(ure)?[/-].+/'
 
