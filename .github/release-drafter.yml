@@ -21,7 +21,7 @@ categories:
     labels:
       - "7.その他"
 exclude-labels:
-  - "99.リリースノートに載せない"
+  - "99.リリースノートに含めない"
 template: |
   ## 変更内容
 
