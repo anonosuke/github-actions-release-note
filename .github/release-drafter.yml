@@ -23,6 +23,4 @@ categories:
 exclude-labels:
   - "99.リリースノートに含めない"
 template: |
-  ## 変更内容
-
   $CHANGES
