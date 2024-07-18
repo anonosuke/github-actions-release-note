@@ -1,53 +1,53 @@
-# name: Release Drafter
+name: Release Drafter
 
-# on:
-#   pull_request:
-#     types: [closed]
-#     branches:
-#       - main
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
 
-# jobs:
-#   update_release:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v4
+jobs:
+  update_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-#       - name: Get the latest release
-#         id: get_release
-#         uses: actions/github-script@v7
-#         with:
-#           script: |
-#             try {
-#               const latestRelease = await github.rest.repos.getLatestRelease({
-#                 owner: context.repo.owner,
-#                 repo: context.repo.repo
-#               });
-#               return latestRelease.data.tag_name;
-#             } catch (error) {
-#               if (error.status === 404) {
-#                 return '1';
-#               }
-#               throw error;
-#             }
+      - name: Get the latest release
+        id: get_release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              const latestRelease = await github.rest.repos.getLatestRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo
+              });
+              return latestRelease.data.tag_name;
+            } catch (error) {
+              if (error.status === 404) {
+                return '1';
+              }
+              throw error;
+            }
 
-#       - name: Increment version
-#         id: increment_version
-#         run: |
-#           latest_version="${{ steps.get_release.outputs.result }}"
-#           if [[ "$latest_version" =~ ^([0-9]+)$ ]]; then
-#             new_version=$((latest_version + 1))
-#           else
-#             new_version=1
-#           fi
-#           echo "new_version=${new_version}" >> $GITHUB_ENV
+      - name: Increment version
+        id: increment_version
+        run: |
+          latest_version="${{ steps.get_release.outputs.result }}"
+          if [[ "$latest_version" =~ ^([0-9]+)$ ]]; then
+            new_version=$((latest_version + 1))
+          else
+            new_version=1
+          fi
+          echo "new_version=${new_version}" >> $GITHUB_ENV
 
-#       - name: Create Release
-#         uses: release-drafter/release-drafter@v6
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         with:
-#           name: '${{ env.new_version }}'
-#           tag: '${{ env.new_version }}'
-#           version: ${{ env.new_version }}
-#           publish: true
+      - name: Create Release
+        uses: release-drafter/release-drafter@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: '${{ env.new_version }}'
+          tag: '${{ env.new_version }}'
+          version: ${{ env.new_version }}
+          publish: true
