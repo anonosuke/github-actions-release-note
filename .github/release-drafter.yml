@@ -19,8 +19,10 @@ categories:
       - "6.テスト"
   - title: 他の変更🔍
     labels:
-      - "*"
+      - "7.その他"
 exclude-labels:
-  - "7.リリースノートに載せない"
+  - "99.リリースノートに載せない"
 template: |
+  ## 変更内容
+
   $CHANGES
