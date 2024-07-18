@@ -1,6 +1,3 @@
-name-template: 'v$RESOLVED_VERSION 🌈'
-tag-template: 'v$RESOLVED_VERSION'
-
 categories:
   - title: 機能追加🌟
     labels:
@@ -23,26 +20,7 @@ categories:
   - title: 他の変更🔍
     labels:
       - "*"
-
 exclude-labels:
   - "7.リリースノートに載せない"
-
-version-resolver:
-  major:
-    labels:
-      - 'major'
-  minor:
-    labels:
-      - 'minor'
-  patch:
-    labels:
-      - 'patch'
-  default: patch
-
-autolabeler:
-  - label: enhancement
-    branch:
-      - '/^feat(ure)?[/-].+/'
-
 template: |
   $CHANGES
