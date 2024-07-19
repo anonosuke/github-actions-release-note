@@ -1,10 +1,9 @@
 name: Release Drafter
 
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
-      - main
+    - master
 
 jobs:
   update_release:
@@ -40,7 +39,7 @@ jobs:
           echo "new_version=${new_version}" >> $GITHUB_ENV
 
       - name: Create Release
-        uses: release-drafter/release-drafter@v6
+        uses: release-drafter/release-drafter@3f0f87098bd6b5c5b9a36d49c41d998ea58f9348 # v6.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
