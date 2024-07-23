@@ -22,5 +22,11 @@ categories:
       - "7.その他"
 exclude-labels:
   - "99.リリースノートに含めない"
+autolabeler:
+  - label: "1.機能"
+    branch:
+      - '/^feat(ure)?[/-].+/'
+    title:
+      - '/^feat(ure)?[/-].+/'
 template: |
   $CHANGES

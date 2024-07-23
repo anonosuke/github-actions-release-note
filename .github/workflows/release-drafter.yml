@@ -9,6 +9,9 @@ jobs:
   update_release:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Get the latest release
         id: get_release
         uses: actions/github-script@v7
