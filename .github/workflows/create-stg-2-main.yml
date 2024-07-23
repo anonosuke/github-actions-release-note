@@ -1,0 +1,33 @@
+name: Create dev2stg PR
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create_pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create dev2stg PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_TITLE="Merge dev into stg"
+          PR_BODY="This PR was created automatically by GitHub Actions."
+          BASE_BRANCH="stg"
+          HEAD_BRANCH="dev"
+
+          # Check if PR already exists
+          PR_EXISTS=$(gh pr list --base "$BASE_BRANCH" --head "$HEAD_BRANCH" --json number --jq ".[0].number")
+
+          if [ -z "$PR_EXISTS" ]; then
+            gh pr create --base "$BASE_BRANCH" --head "$HEAD_BRANCH" --title "$PR_TITLE" --body "$PR_BODY"
+            echo "Pull request created: $PR_TITLE"
+          else
+            echo "Pull request already exists: #$PR_EXISTS"
+          fi
