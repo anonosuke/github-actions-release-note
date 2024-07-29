@@ -18,13 +18,13 @@ jobs:
       - name: Check if pr exists
         id: check_pr
         run: |
-          pr_title=${{ (github.ref == 'refs/heads/stage' && 'Stage') || 'Develop' }}
-          base_branch=${{ (github.ref == 'refs/heads/stage' && 'main') || 'stage' }}
-          echo "::set-output name=count::$(gh pr list -S ${pr_title}' in:title' -B $base_branch | wc -l)"
-          echo "::set-output name=pr_title::$pr_title"
-          echo "::set-output name=base_branch::$base_branch"
+          pr_title=${{ (github.ref == 'refs/heads/staging1' && 'stg2main') || 'dev2stg' }}
+          base_branch=${{ (github.ref == 'refs/heads/staging1' && 'main') || 'staging1' }}
+          echo "count=$(gh pr list -S ${pr_title}' in:title' -B $base_branch | wc -l)" >> $GITHUB_ENV
+          echo "pr_title=$pr_title" >> $GITHUB_ENV
+          echo "base_branch=$base_branch" >> $GITHUB_ENV
       # リリース用PRを作成
       - name: Create release pr
-        if: ${{ steps.check_pr.outputs.count == 0 }}
+        if: ${{ env.count == 0 }}
         run: |
-          gh pr create -B ${{ steps.check_pr.outputs.base_branch }} -t ${{ steps.check_pr.outputs.pr_title }} -b ""
+          gh pr create -B ${{ env.base_branch }} -t ${{ env.pr_title }} -b ""
