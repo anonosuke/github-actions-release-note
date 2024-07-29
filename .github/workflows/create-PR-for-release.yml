@@ -2,7 +2,7 @@ name: Create a pull request for release.
 
 on:
   push:
-    branches: [ staging1, develop ]
+    branches: [ staging2, develop ]
 
 jobs:
   create-release-pr:
@@ -18,8 +18,8 @@ jobs:
       - name: Check if pr exists
         id: check_pr
         run: |
-          pr_title=${{ (github.ref == 'refs/heads/staging1' && 'stg2main') || 'dev2stg' }}
-          base_branch=${{ (github.ref == 'refs/heads/staging1' && 'main') || 'staging1' }}
+          pr_title=${{ (github.ref == 'refs/heads/staging2' && 'stg2main') || 'dev2stg' }}
+          base_branch=${{ (github.ref == 'refs/heads/staging2' && 'main') || 'staging2' }}
           echo "count=$(gh pr list -S ${pr_title}' in:title' -B $base_branch | wc -l)" >> $GITHUB_ENV
           echo "pr_title=$pr_title" >> $GITHUB_ENV
           echo "base_branch=$base_branch" >> $GITHUB_ENV
