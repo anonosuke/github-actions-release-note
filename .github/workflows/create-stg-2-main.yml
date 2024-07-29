@@ -13,19 +13,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up GitHub CLI
+        uses: actions/setup-gh-cli@v1
+
       - name: Create dev2stg PR
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           PR_TITLE="Merge dev into stg"
           PR_BODY="This PR was created automatically by GitHub Actions."
           BASE_BRANCH="stg"
           HEAD_BRANCH="dev"
 
+          # Fetch all branches
+          git fetch origin
+
           # Check if PR already exists
           PR_EXISTS=$(gh pr list --base "$BASE_BRANCH" --head "$HEAD_BRANCH" --json number --jq ".[0].number")
 
           if [ -z "$PR_EXISTS" ]; then
+            # Create an empty commit
+            git checkout $HEAD_BRANCH
+            git commit --allow-empty -m "Empty commit to create PR from dev to stg"
+
+            # Push the empty commit
+            git push origin $HEAD_BRANCH
+
+            # Create the PR
             gh pr create --base "$BASE_BRANCH" --head "$HEAD_BRANCH" --title "$PR_TITLE" --body "$PR_BODY"
             echo "Pull request created: $PR_TITLE"
           else
