@@ -27,4 +27,4 @@ jobs:
       - name: Create release pr
         if: ${{ env.count == 0 }}
         run: |
-          gh pr create -B ${{ env.base_branch }} -t ${{ env.pr_title }} -b ""
+          gh pr create -B ${{ env.base_branch }} -t ${{ env.pr_title }} -b "" -l "99.リリースノートに含めない"
