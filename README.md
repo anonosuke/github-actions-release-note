@@ -1,1 +1,1 @@
-# github-actions-test
+githun actions を用いた自動リリースノート作成
